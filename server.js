@@ -28,6 +28,7 @@ const config = {
   authorizationParams: {
     response_type: "code"    
   },
+  getLoginState: (req, opts) => {return { returnTo: opts.returnTo || req.originalUrl, customState: 'MyStateIsHere' }},
   afterCallback: (req, res, session) => {
     console.log("session", session);
     // const claims = jose.JWT.decode(session.id_token); // using jose library to decode JWT

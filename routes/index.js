@@ -19,7 +19,7 @@ router.get("/profile", requiresAuth(), function (req, res, next) {
 
 router.get("/login", async (req, res) => {
   const state = "MyStateIsHere";
-  const stateObject = { customState: state }
+  const stateObject = { returnTo: "/profile", customState: state }
   
   //par
   const result = await postPar(stateObject);
@@ -27,8 +27,8 @@ router.get("/login", async (req, res) => {
     returnTo: "/profile",
     authorizationParams: {
       redirect_uri: "http://localhost:3000/callback",
-       request_uri: result.request_uri,
-       state: state
+      request_uri: result.request_uri,
+      state: state
     },
   });
 });
@@ -45,6 +45,8 @@ const postPar = async (state) => {
     redirect_uri: "http://localhost:3000/callback",
     response_type: "code",
     "ext-context": "password reset",
+    scope: "openid profile email",
+    nonce:"defaultNonce",
     state:Buffer.from(JSON.stringify(state)).toString('base64url')
   });
 
